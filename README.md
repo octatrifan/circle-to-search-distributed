@@ -1,14 +1,14 @@
 # To run React App
 ## Ensure you have the following installed on your system:
 
-Node.js
-npm
+1. Node.js
+2. npm
 
 ## Install Dependencies
-npm install
-npm install axios 
-npm install react-router-dom 
-npm install react-image-crop
+1. npm install
+2. npm install axios 
+3. npm install react-router-dom 
+4. npm install react-image-crop
 
 ## Available Scripts
 
