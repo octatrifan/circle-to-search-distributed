@@ -1,0 +1,153 @@
+/* Make the background cover the entire page */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(to bottom right, #e3efff, #d0f0d7);
+  justify-content: center;
+  align-items: center;
+}
+
+.home-container h1{
+text-align: center;
+}
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+/* Center the upload card */
+.upload-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px; /* Reduce width for better proportions */
+  max-width: 90%;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.upload-card:hover {
+  transform: scale(1.02);
+}
+
+/* Title */
+.upload-card h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* File Input */
+.file-input {
+  display: block;
+  margin: 10px auto;
+  padding: 8px;
+  align-items: center;
+}
+
+/* Image Preview */
+.image-preview {
+  display: block;
+  width: 100%;
+  /* max-height: 250px; */
+  object-fit: contain;
+  border-radius: 12px;
+  margin-top: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Upload Button */
+.upload-button {
+  display: block;
+  width: 100%;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 15px;
+}
+
+.upload-button:hover {
+  background: #0056b3;
+}
+
+/* Upload Status */
+.upload-status {
+  font-size: 14px;
+  color: #333;
+  margin-top: 10px;
+}
+ .results-container {
+  background: #f8f8f8;
+  padding: 10px;
+  border-radius: 16px;
+  text-align: left;
+  overflow-y: auto;
+} 
+.results-container h3{
+  margin: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+} 
+
+.result-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.result-image:hover {
+  transform: scale(1.1);
+}
+
+
+/* ccccccjdnkdbkjdsv kjsd vdv sdv ddv s dsv */
+/* 1. Container for both sections */
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* 2. Left Column: Upload Section */
+.upload-section {
+  flex: 1;
+  max-width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* 3. Right Column: Results Section */
+.results-section {
+  flex: 1;
+  max-width: 50%;
+}
+
+/* 4. Results Grid */
+.results-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
