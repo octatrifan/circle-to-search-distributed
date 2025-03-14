@@ -1,5 +1,5 @@
 # To run React App
-## Ensure you have the following installed on your system:
+## make sure to install the following:
 
 1. Node.js
 2. npm
