@@ -19,6 +19,14 @@ def split_and_assign_cluster(cluster_embeddings, image_paths, metadata, closest_
     labels = kmeans.fit_predict(cluster_embeddings)
 
     original_db_file = metadata[closest_cluster]["hdf5_file"]
+
+    # Remove the original cluster's data from the original HDF5 file
+    with h5py.File(original_db_file, "a") as f_original:
+        if f"embeddings_{closest_cluster}" in f_original:
+            del f_original[f"embeddings_{closest_cluster}"]
+        if f"image_paths_{closest_cluster}" in f_original:
+            del f_original[f"image_paths_{closest_cluster}"]
+
     new_clusters = {}
     for i in range(2):
         indices = np.where(labels == i)[0]
