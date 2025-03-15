@@ -57,3 +57,19 @@ def find_similar_centroids(query_embedding):
 
     return close_cluster_ids, close_hdf5_files
 
+def get_database_loading_status():
+    """Get the loading status of each database.
+    "database_free_space": {
+        "hdf5_files/db_0.h5": 61,...}"""
+    with open(METADATA_FILE, "r") as f:
+        metadata = json.load(f)
+
+    # For each database, calculate the loading status 1 - free_space/200
+    database_loading_status = {}
+    for db_file, free_space in metadata["database_free_space"].items():
+        loading_status = 1 - free_space/200
+        # get db names by remove the path and the .h5 extension
+        db_file = db_file.split("/")[-1].split(".")[0]
+        database_loading_status[db_file] = loading_status
+
+    return database_loading_status

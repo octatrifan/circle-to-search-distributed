@@ -61,7 +61,7 @@ def split_and_assign_cluster(cluster_embeddings, image_paths, metadata, closest_
     return metadata
 
 
-def insert_image_to_database(image_path, metadata_file, max_cluster_size=MAX_CLUSTER_SIZE):
+def insert_image_to_database(image_path, metadata_file=METADATA_FILE, max_cluster_size=MAX_CLUSTER_SIZE):
     """Insert an image into the database while handling cluster splitting and migration if needed."""
 
     query_embedding = extract_clip_embedding(image_path)
