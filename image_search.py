@@ -13,9 +13,6 @@ def search_similar_images(image_path, top_k=5):
     query_embedding = extract_clip_embedding(image_path)
     close_cluster_ids, close_hdf5_files = find_similar_centroids(query_embedding)
 
-    with open(METADATA_FILE, "r") as f:
-        metadata = json.load(f)
-
     all_candidates = []
 
     # Search within each close cluster

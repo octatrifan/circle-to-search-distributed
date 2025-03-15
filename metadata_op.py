@@ -3,6 +3,15 @@ import numpy as np
 
 METADATA_FILE = "centroids_metadata.json"
 
+def find_database_with_max_space():
+    """Find the HDF5 file with the highest available space."""
+    with open(METADATA_FILE, "r") as f:
+        metadata = json.load(f)
+
+    db_free_space = metadata.get("database_free_space", {})
+    best_db = max(db_free_space, key=db_free_space.get)  # Find DB with max free space
+    return best_db
+
 def find_closest_centroid(query_embedding):
     """Finds the closest centroid from metadata."""
     with open(METADATA_FILE, "r") as f:
