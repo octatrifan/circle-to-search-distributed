@@ -1,0 +1,83 @@
+{
+  "api_documentation": {
+    "image_search": {
+      "endpoint": "/image_search",
+      "method": "POST",
+      "description": "Search for similar images based on the provided image path.",
+      "request": {
+        "content_type": "application/json",
+        "body": {
+          "image_path": "path_string1"
+        }
+      },
+      "backend_response": {
+        "200": {
+          "content_type": "application/json",
+          "body": {
+            "images": ["path_string1", "path_string2", "path_string3"],
+            "similarity_score": [0.95, 0.89, 0.87]
+          }
+        },
+        "400": {
+          "content_type": "application/json",
+          "body": {
+            "error": "Missing image_path parameter"
+          }
+        }
+      }
+    },
+    "insert_images": {
+      "endpoint": "/insert_images",
+      "method": "POST",
+      "description": "Insert a list of images into the database.",
+      "request": {
+        "content_type": "application/json",
+        "body": {
+          "image_paths": ["path_string1", "path_string2"]
+        }
+      },
+      "backend_response": {
+        "200": {
+          "success_all_inserted": {
+            "content_type": "application/json",
+            "body": {
+              "message": "Successfully inserted all images."
+            }
+          },
+          "partial_failure": {
+            "content_type": "application/json",
+            "body": {
+              "message": "Some images could not be inserted.",
+              "not_inserted": ["path_string1", "path_string2"]
+            }
+          }
+        },
+        "400": {
+          "content_type": "application/json",
+          "body": {
+            "error": "Missing image_paths parameter"
+          }
+        }
+      }
+    },
+    "database_status": {
+      "endpoint": "/database_status",
+      "method": "GET",
+      "description": "Retrieve the current loading status of each database.",
+      "request": {
+        "content_type": "none",
+        "body": "none"
+      },
+      "backend_response": {
+        "200": {
+          "content_type": "application/json",
+          "body": {
+            "db_name1": 80,
+            "db_name2": 50,
+            "db_name3": 100
+          }
+        }
+      }
+    }
+  }
+}
