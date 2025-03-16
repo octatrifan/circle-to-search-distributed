@@ -48,7 +48,7 @@ function ImageUpload({ setResults }) {
 
     try {
       const response = await axios.post(
-        process.env.BACKEND_URL + "/upload",
+        process.env.BACKEND_URL + "/image_search",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -144,7 +144,7 @@ function ImageUpload({ setResults }) {
     //  }
     try {
       const response = await axios.post(
-        process.env.BACKEND_URL + "/upload-images",
+        process.env.BACKEND_URL + "/insert_images",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
