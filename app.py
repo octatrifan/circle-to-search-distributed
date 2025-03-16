@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 from image_search import search_similar_images
 from insert_image import insert_image_to_database
 from metadata_op import get_database_loading_status
+from flask_cors import CORS 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/image_search', methods=['POST'])
 def image_search():
