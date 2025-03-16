@@ -7,13 +7,31 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+UPLOAD_FOLDER = "uploadsWaleedTest"  # Folder to temporarily store uploaded images
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 @app.route('/image_search', methods=['POST'])
 def image_search():
-    data = request.json
-    if 'image_path' not in data:
-        return jsonify({"error": "Missing image_path parameter"}), 400
+    # data = request.json
+    # if 'image_path' not in data:
+    #     return jsonify({"error": "Missing image_path parameter"}), 400
 
-    image_path = data['image_path']
+    # image_path = data['image_path']
+    # results = search_similar_images(image_path)
+
+    # response = {
+    #     "images": [img[0] for img in results],
+    #     "similarity_score": [img[1] for img in results]
+    # }
+    #return jsonify(response)
+    if 'image' not in request.files:
+        return jsonify({"error": "Missing image file"}), 400
+
+    image = request.files['image']
+    image_path = os.path.join(UPLOAD_FOLDER, image.filename)
+    image.save(image_path)  # Save image temporarily
+
+    # Call image search function
     results = search_similar_images(image_path)
 
     response = {
