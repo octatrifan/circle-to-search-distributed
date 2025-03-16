@@ -21,6 +21,7 @@ function ImageUpload({ setResults }) {
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
   const [selectedImages, setSelectedImages] = useState([]);
+  const serverurl = "http://127.0.0.1:5000";
 
   const handleImageSlecet = (e) => {
     const file = e.target.files[0];
@@ -38,7 +39,8 @@ function ImageUpload({ setResults }) {
     const croppedBlob = await getCroppedImage();
     setUploadStatus("Uploading...");
     const formData = new FormData();
-    formData.append("image", croppedBlob);
+    const imageFile = new File([croppedBlob], "cropped-image.jpg", { type: "image/jpeg" });
+    formData.append("image", imageFile);
     // console.log(formData);
     // console.log("Uploading image:", croppedBlob);
     // console.log("FormData entries:");
@@ -48,7 +50,7 @@ function ImageUpload({ setResults }) {
 
     try {
       const response = await axios.post(
-        process.env.BACKEND_URL + "/image_search",
+        serverurl + "/image_search",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -134,9 +136,12 @@ function ImageUpload({ setResults }) {
   
     setUploadStatus("Uploading images...");
     const formData = new FormData();
-    selectedImages.forEach((image, index) => {
-      formData.append(`image${index}`, image);
+    selectedImages.forEach((image) => {
+      formData.append("images", image);
     });
+    // selectedImages.forEach((image, index) => {
+    //   formData.append(`image${index}`, image);
+    // });
     //console.log(selectedImages);
     //console.log("FormData entries:");
     // for (let pair of formData.entries()) {
@@ -144,7 +149,7 @@ function ImageUpload({ setResults }) {
     //  }
     try {
       const response = await axios.post(
-        process.env.BACKEND_URL + "/insert_images",
+        serverurl + "/insert_images",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
