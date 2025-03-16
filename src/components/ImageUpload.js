@@ -20,6 +20,7 @@ function ImageUpload({ setResults }) {
   const MIN_DIMENSION = 150;
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const handleImageSlecet = (e) => {
     const file = e.target.files[0];
@@ -29,9 +30,9 @@ function ImageUpload({ setResults }) {
     }
     console.log("Selected File:", file);
   };
-  const handleUpload = async () => {
+  const handleSearch = async () => {
     if (!image) {
-      setUploadStatus("Please select an image first.");
+      setUploadStatus("Please select an image first for search.");
       return;
     }
     const croppedBlob = await getCroppedImage();
@@ -120,6 +121,42 @@ function ImageUpload({ setResults }) {
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
   };
+  const handleMultipleImageSelect = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedImages(files);
+    console.log("Selected images for upload:", files);
+  };
+  const uploadImages = async () => {
+    if (selectedImages.length === 0) {
+      setUploadStatus("Please select images first for upload.");
+      return;
+    }
+  
+    setUploadStatus("Uploading images...");
+    const formData = new FormData();
+    selectedImages.forEach((image, index) => {
+      formData.append(`image${index}`, image);
+    });
+    //console.log(selectedImages);
+    //console.log("FormData entries:");
+    // for (let pair of formData.entries()) {
+    //    console.log(pair[0], pair[1]); 
+    //  }
+    try {
+      const response = await axios.post(
+        process.env.BACKEND_URL + "/upload-images",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+  
+      console.log("Uploaded Images Response:", response.data);
+      setUploadStatus("Images uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      setUploadStatus("Image upload failed. Please try again.");
+    }
+  };
+  
 
   return (
 
@@ -134,8 +171,10 @@ function ImageUpload({ setResults }) {
         minWidth={MIN_DIMENSION}>
         {preview && <img src={preview} ref={imgRef} alt="Preview" className="image-preview" onLoad={onImageLoad} />}
       </ReactCrop>
-      <button onClick={handleUpload} className="upload-button">Upload</button>
+      <button onClick={handleSearch} className="upload-button">Search</button>
       <button onClick={localTest} className="upload-button">local test</button>
+      <input type="file" accept="image/*" multiple onChange={handleMultipleImageSelect} className="file-input" />
+      <button onClick={uploadImages} className="upload-button">Upload Images</button>
       <p className="upload-status">{uploadStatus}</p>
       <canvas ref={previewCanvasRef} style={{ display: "none" }} />
     </div>
