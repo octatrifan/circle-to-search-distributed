@@ -81,18 +81,32 @@ const convertBlobToBase64 = (blob) => {
   });
 };
 
-  const localTest = async () => {
-    try {
-      const croppedBlob = await getCroppedImage();
-      const croppedImageUrl = URL.createObjectURL(croppedBlob);
-
-      const localImages = [croppedImageUrl, croppedImageUrl, croppedImageUrl, croppedImageUrl, croppedImageUrl, croppedImageUrl];
-      console.log("Local test images loaded:", localImages);
-      setResults(localImages);
-    } catch (error) {
-      console.error("Error in localTest:", error);
-    }
+  // now this function test the searchresult.js by sending only path, the "101_ObjectCategories" must be inside the public folder
+  // circle-to-search-distributed ==> public, src, hdf5_files .. and so on
+  const localTest = () => {
+    const localImages = [
+      "./101_ObjectCategories/camera/image_0036.jpg",
+      "./101_ObjectCategories/camera/image_0014.jpg",
+      "./101_ObjectCategories/camera/image_0001.jpg",
+      "./101_ObjectCategories/camera/image_0029.jpg",
+      "./101_ObjectCategories/camera/image_0005.jpg"
+    ];
+  
+    console.log("Local test images loaded:", localImages);
+    setResults(localImages);
   };
+  // const localTest = async () => {
+  //   try {
+  //     const croppedBlob = await getCroppedImage();
+  //     const croppedImageUrl = URL.createObjectURL(croppedBlob);
+
+  //     const localImages = [croppedImageUrl, croppedImageUrl, croppedImageUrl, croppedImageUrl, croppedImageUrl, croppedImageUrl];
+  //     console.log("Local test images loaded:", localImages);
+  //     setResults(localImages);
+  //   } catch (error) {
+  //     console.error("Error in localTest:", error);
+  //   }
+  // };
   const getCroppedImage = async () => {
     return new Promise((resolve, reject) => {
       if (!imgRef.current || !crop) {
