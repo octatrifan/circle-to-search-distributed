@@ -8,6 +8,7 @@ processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 def extract_clip_embedding(img_path):
     """Extracts a 512-dimensional CLIP embedding for an image."""
+    print("Received imgpath ", img_path)
     try:
         image = Image.open(img_path).convert("RGB")
         inputs = processor(images=image, return_tensors="pt").to(device)

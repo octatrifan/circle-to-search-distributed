@@ -36,6 +36,6 @@ def search_similar_images(image_path, top_k=5):
     return all_candidates[:top_k]
 
 # Test the script
-image_path = "101_ObjectCategories/airplanes/image_0001.jpg"
+image_path = "caltech-101/101_ObjectCategories/101_ObjectCategories/airplanes/image_0001.jpg"
 similar_images = search_similar_images(image_path)
 print(similar_images)

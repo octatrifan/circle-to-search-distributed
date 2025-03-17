@@ -62,30 +62,20 @@ def split_large_clusters(embeddings, image_paths, labels, centroids):
 
 
 def distribute_clusters(clusters, embeddings, centroids):
-    """Distributes clusters across databases and assigns workers based on DB file."""
+    """Distributes clusters across databases based on remaining capacity."""
     os.makedirs("hdf5_files", exist_ok=True)
     database_free_space = {f"hdf5_files/db_{i}.h5": MAX_DB_CAPACITY for i in range(NUM_DATABASES)}
-
-    # Mapping database files to workers
-    worker_mapping = {
-        "hdf5_files/db_0.h5": "worker1",
-        "hdf5_files/db_1.h5": "worker2",
-        "hdf5_files/db_2.h5": "worker3"
-    }
-
     cluster_metadata = {"database_free_space": database_free_space.copy()}
 
-    for cluster_id, (indices, paths) in sorted(clusters.items(), key=lambda x: -len(x[1][0])):
+    for cluster_id, (indices, paths) in sorted(clusters.items(),
+                                               key=lambda x: -len(x[1][0])):  # Sort by size descending
         best_db = max(database_free_space, key=database_free_space.get)
 
         if database_free_space[best_db] >= len(indices):
-            assigned_worker = worker_mapping[best_db]  # Choose worker based on file name
-
             cluster_metadata[f"cluster_{cluster_id}"] = {
                 "hdf5_file": best_db,
                 "size": len(indices),
-                "centroid": centroids[cluster_id].tolist(),
-                "worker": assigned_worker  # ✅ Now assigns the correct worker
+                "centroid": centroids[cluster_id].tolist()
             }
 
             with h5py.File(best_db, "a") as f:

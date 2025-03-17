@@ -11,7 +11,6 @@ from sklearn.cluster import KMeans
 METADATA_FILE = "centroids_metadata.json"
 MAX_CLUSTER_SIZE = 500
 
-
 worker_mapping = {
     "hdf5_files/db_0.h5": "worker1",
     "hdf5_files/db_1.h5": "worker2",
@@ -24,7 +23,7 @@ def split_and_assign_cluster(cluster_embeddings, image_paths, metadata, closest_
     kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
     labels = kmeans.fit_predict(cluster_embeddings)
 
-    original_db_file = metadata[closest_cluster]["hdf5_file"]
+    original_db_file = metadata[closest_cluster]["hdf5_file"]  # ✅ Keep worker consistent
 
     # Remove the original cluster's data from the original HDF5 file
     with h5py.File(original_db_file, "a") as f_original:
@@ -38,6 +37,7 @@ def split_and_assign_cluster(cluster_embeddings, image_paths, metadata, closest_
         indices = np.where(labels == i)[0]
         new_db_file = find_database_with_max_space()
 
+        print("new_db_file ", new_db_file)
         assigned_worker = worker_mapping[new_db_file]
 
         new_cluster_id = f"cluster_{len(metadata)}"
@@ -70,12 +70,12 @@ def split_and_assign_cluster(cluster_embeddings, image_paths, metadata, closest_
     return metadata
 
 
-def insert_image_to_database(image_path, filename, metadata_file=METADATA_FILE, max_cluster_size=MAX_CLUSTER_SIZE):
+def insert_image_to_database(image_path, metadata_file=METADATA_FILE, max_cluster_size=MAX_CLUSTER_SIZE):
     """Insert an image into the database while handling cluster splitting and migration if needed."""
 
     query_embedding = extract_clip_embedding(image_path)
 
-    closest_cluster, db_file, assigned_worker = find_closest_centroid(query_embedding)
+    closest_cluster, db_file = find_closest_centroid(query_embedding)
 
     with open(metadata_file, "r") as f:
         metadata = json.load(f)
@@ -86,7 +86,7 @@ def insert_image_to_database(image_path, filename, metadata_file=METADATA_FILE, 
 
         # Append new image
         cluster_embeddings = np.vstack([cluster_embeddings, query_embedding])
-        image_paths.append("./uploads/"+filename)
+        image_paths.append(image_path)
 
         # Recalculate centroid
         new_centroid = np.mean(cluster_embeddings, axis=0)
@@ -112,7 +112,7 @@ def insert_image_to_database(image_path, filename, metadata_file=METADATA_FILE, 
             metadata[closest_cluster]["centroid"] = new_centroid.tolist()
             metadata[closest_cluster]["size"] = len(cluster_embeddings)
             assigned_worker = worker_mapping[db_file]
-            metadata[closest_cluster]["worker"] = assigned_worker
+            metadata[closest_cluster]["worker"] =  assigned_worker
 
             # Update database free space
             metadata["database_free_space"][db_file] -= 1

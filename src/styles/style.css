@@ -17,6 +17,16 @@ text-align: center;
   align-items: center;
   padding: 20px;
 }
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.logo-image {
+  width: 500px;  /* Adjust size as needed */
+  height: auto;
+}
 /* Center the upload card */
 .upload-card {
   background: white;
@@ -140,7 +150,7 @@ text-align: center;
 /* 3. Right Column: Results Section */
 .results-section {
   flex: 1;
-  max-width: 50%;
+  max-width: 100%;
 }
 
 /* 4. Results Grid */
