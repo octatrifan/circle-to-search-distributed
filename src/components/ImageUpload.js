@@ -31,43 +31,56 @@ function ImageUpload({ setResults }) {
     }
     console.log("Selected File:", file);
   };
-  const handleSearch = async () => {
-    if (!image) {
+const handleSearch = async () => {
+  if (!image) {
       setUploadStatus("Please select an image first for search.");
       return;
-    }
-    const croppedBlob = await getCroppedImage();
-    setUploadStatus("Uploading...");
-    const formData = new FormData();
-    const imageFile = new File([croppedBlob], "cropped-image.jpg", { type: "image/jpeg" });
-    formData.append("image", imageFile);
-    // console.log(formData);
-    // console.log("Uploading image:", croppedBlob);
-    // console.log("FormData entries:");
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0], pair[1]); 
-    // }
+  }
+  
+  setUploadStatus("Processing image...");
+  
+  try {
+      const croppedBlob = await getCroppedImage();
+      
+      // Convert Blob to Base64
+      const base64Image = await convertBlobToBase64(croppedBlob);
+      console.log(base64Image);
+      
+      setUploadStatus("Uploading...");
 
-    try {
+      const payload = {
+          image: base64Image,  
+      };
+
       const response = await axios.post(
-        serverurl + "/image_search",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+          serverurl + "/image_search",
+          payload,  // Send as JSON
+          { headers: { "Content-Type": "application/json" } }
       );
 
       console.log("Backend Response:", response.data);
 
       if (response.data && response.data.images) {
-        setResults(response.data.images); 
-        setUploadStatus("Upload successful!");
+          setResults(response.data.images);
+          setUploadStatus("Upload successful!");
       } else {
-        setUploadStatus("Error: No images found in response.");
+          setUploadStatus("Error: No images found in response.");
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Error uploading image:", error);
       setUploadStatus("Upload failed. Please try again.");
-    }
-  };
+  }
+};
+
+const convertBlobToBase64 = (blob) => {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => resolve(reader.result); // Base64 string
+      reader.onerror = reject;
+  });
+};
+
   const localTest = async () => {
     try {
       const croppedBlob = await getCroppedImage();
