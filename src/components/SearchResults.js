@@ -1,8 +1,8 @@
 import React from "react";
-
-function SearchResults({ results }) {
+import "../styles/style.css"; 
+const SearchResults = ({ results }) => {
   if (!results || results.length === 0) {
-    return null;
+    return <p>No results found</p>;
   }
 
   return (
@@ -15,7 +15,7 @@ function SearchResults({ results }) {
       </div>
     </div>
   );
-}
+};
 
 export default SearchResults;
 
