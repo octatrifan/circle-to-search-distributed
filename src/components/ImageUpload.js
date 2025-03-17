@@ -155,39 +155,48 @@ const convertBlobToBase64 = (blob) => {
     setSelectedImages(files);
     console.log("Selected images for upload:", files);
   };
-  const uploadImages = async () => {
-    if (selectedImages.length === 0) {
+const uploadImages = async () => {
+  if (selectedImages.length === 0) {
       setUploadStatus("Please select images first for upload.");
       return;
-    }
-  
-    setUploadStatus("Uploading images...");
-    const formData = new FormData();
-    selectedImages.forEach((image) => {
-      formData.append("images", image);
-    });
-    // selectedImages.forEach((image, index) => {
-    //   formData.append(`image${index}`, image);
-    // });
-    //console.log(selectedImages);
-    //console.log("FormData entries:");
-    // for (let pair of formData.entries()) {
-    //    console.log(pair[0], pair[1]); 
-    //  }
-    try {
-      const response = await axios.post(
-        serverurl + "/insert_images",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+  }
+
+  setUploadStatus("Processing images...");
+
+  try {
+      // Convert all selected images to Base64
+      const base64Images = await Promise.all(
+          selectedImages.map((file) => convertFileToBase64(file))
       );
-  
+      console.log(base64Images);
+      setUploadStatus("Uploading images...");
+
+      const payload = {
+          images: base64Images, // Send an array of Base64 strings
+      };
+
+      const response = await axios.post(
+          serverurl + "/insert_images",
+          payload,  // Send as JSON
+          { headers: { "Content-Type": "application/json" } }
+      );
+
       console.log("Uploaded Images Response:", response.data);
       setUploadStatus("Images uploaded successfully!");
-    } catch (error) {
+  } catch (error) {
       console.error("Error uploading images:", error);
       setUploadStatus("Image upload failed. Please try again.");
-    }
-  };
+  }
+};
+
+const convertFileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => resolve(reader.result); // Base64 string
+      reader.onerror = reject;
+  });
+};
   
 
   return (
