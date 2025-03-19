@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 
 # Configuration
 NUM_CLUSTERS = 10  # Initial 10-Means Clustering
-NUM_DATABASES = 3  # Number of database instances
+NUM_DATABASES = 5  # Number of database instances
 MAX_DB_CAPACITY = 1000  # Max images per database instance
 SPLIT_THRESHOLD = 500  # If cluster has more than this, apply recursive 2-Means
 EMBEDDINGS_FILE = "image_embeddings.npy"
@@ -70,7 +70,10 @@ def distribute_clusters(clusters, embeddings, centroids):
     worker_mapping = {
         "hdf5_files/db_0.h5": "worker1",
         "hdf5_files/db_1.h5": "worker2",
-        "hdf5_files/db_2.h5": "worker3"
+        "hdf5_files/db_2.h5": "worker3",
+        "hdf5_files/db_3.h5": "worker4",
+        "hdf5_files/db_4.h5": "worker5",
+
     }
 
     cluster_metadata = {"database_free_space": database_free_space.copy()}

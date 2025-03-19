@@ -25,6 +25,8 @@ WORKER_NODES = {
     "worker1": "http://127.0.0.1:5001",
     "worker2": "http://127.0.0.1:5002",
     "worker3": "http://127.0.0.1:5003",
+    "worker4": "http://127.0.0.1:5004",
+    "worker5": "http://127.0.0.1:5005",
 }
 
 def generate_unique_filename(extension=".jpg"):
@@ -80,24 +82,6 @@ def insert_images():
         insert_image_to_database(destination_path, filename)
 
     return jsonify({"message": "Uploaded successfully!", "filenames": filenames})
-
-    # new_filename = generate_unique_filename(".jpg")
-    # new_image_path = os.path.join(UPLOAD_FOLDER, new_filename)
-    # shutil.move(TEMP_IMAGE_PATH, new_image_path)  # Move to public/uploads/
-    #
-    # print(f"Moved image to: {new_image_path}")
-    # image_paths = [new_image_path]
-
-    for img_path in image_paths:
-        if insert_image_to_database(img_path):
-            success_list.append(img_path)
-        else:
-            failure_list.append(img_path)
-
-    # return jsonify({
-    #     "success": success_list,
-    #     "failed": failure_list
-    # })
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)

@@ -11,11 +11,12 @@ from sklearn.cluster import KMeans
 METADATA_FILE = "centroids_metadata.json"
 MAX_CLUSTER_SIZE = 500
 
-
 worker_mapping = {
     "hdf5_files/db_0.h5": "worker1",
     "hdf5_files/db_1.h5": "worker2",
-    "hdf5_files/db_2.h5": "worker3"
+    "hdf5_files/db_2.h5": "worker3",
+    "hdf5_files/db_3.h5": "worker4",
+    "hdf5_files/db_4.h5": "worker5",
 }
 
 def split_and_assign_cluster(cluster_embeddings, image_paths, metadata, closest_cluster,
